@@ -28,21 +28,22 @@ public class WebSecurityConfiguration {
         this.jwtRequestFilter = jwtRequestFilter;
     }
 
-
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity security) throws Exception {
-        return security.csrf().disable()
-                .authorizeHttpRequests()
-                .requestMatchers("/signup", "/login").permitAll()
-                .and()
-                .authorizeHttpRequests().requestMatchers("/api/**")
-                .authenticated()
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
-                .build();
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        return http
+            .cors().and().csrf().disable()  // Enable CORS and disable CSRF
+            .authorizeRequests()
+            .requestMatchers("/signup", "/login").permitAll()  // Allow signup and login
+            .requestMatchers("/api/v1/employees").hasRole("ADMIN")  // Restrict employees API to admin
+            .anyRequest().authenticated()  // All other requests must be authenticated
+            .and()
+            .exceptionHandling().accessDeniedPage("/403")  // Custom access denied page
+            .and()
+            .sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)  // Stateless session
+            .and()
+            .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)  // JWT filter
+            .build();
     }
 
     @Bean
@@ -54,5 +55,4 @@ public class WebSecurityConfiguration {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
-
 }

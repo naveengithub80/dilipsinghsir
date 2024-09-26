@@ -54,6 +54,7 @@ public class LoginController {
         }
         final UserDetails userDetails = customerService.loadUserByUsername(loginRequest.getEmail());
         final String jwt = jwtUtil.generateToken(userDetails.getUsername());
+        System.out.println("generated token : " + jwt);
 
         // Get user roles
         List<String> roles = userDetails.getAuthorities().stream()

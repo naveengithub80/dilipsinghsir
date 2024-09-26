@@ -23,8 +23,11 @@ import com.digital.repository.EmployeeRepository;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/employees")
 public class EmployeeController {
+	
+	
+	
 
     @Autowired
     private EmployeeRepository employeeRepository;
@@ -66,14 +69,7 @@ public class EmployeeController {
     }
     
     
-    
-    
-    
-    
-    
-    
-    
-    
+   
 
     // New GET method to retrieve the employee photo
     @GetMapping("/employees/{id}/photo")
@@ -93,10 +89,6 @@ public class EmployeeController {
     
     
     
-    
-    
-    
-
     // GET method to retrieve all employees
     @GetMapping("/employees")
     public List<Employee> getAllEmployees() {
