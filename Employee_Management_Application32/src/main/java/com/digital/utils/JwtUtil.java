@@ -22,20 +22,6 @@ public class JwtUtil {
 
     public static final String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A713474375367566B59703373367639792F423F4528482B4D6251655468576D5A713474375367566B59703373367639792F423F4528482B4D6251655468576D5A713474375367566B59703373367639792F423F4528482B4D6251655468576D5A713474375367566B59703373367639792F423F4528482B4D6251655468576D5A713474375367566B59703373367639792F423F4528482B4D6251655468576D5A713474375367566B59703373367639792F423F4528482B4D6251655468576D5A713474375367566B59703373367639792F423F4528482B4D6251655468576D5A713474375367566B59703373367639792F423F4528482B4D6251655468576D5A713474375367566B59703373367639792F423F4528482B4D6251655468576D5A713474375367566B59703373367639792F423F4528482B4D6251655468576D5A713474375367566B59703373367639792F423F4528482B4D6251655468576D5A713474375367566B59703373367639792F423F4528482B4D6251655468576D5A713474375367566B59703373367639792F423F4528482B4D6251655468576D5A713474375367566B59703373367639792F423F4528482B4D6251655468576D5A713474375367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
 
-    private final long EXPIRATION_TIME = 1000 * 60 * 60; // 1 hour
-    
-    
-    
- // Method to generate JWT token
-    public String generateToken(Customer customer) {
-        return Jwts.builder()
-                .setSubject(customer.getEmail()) // Use the customer's email as the subject
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .signWith(SignatureAlgorithm.HS256, SECRET)
-                .compact();
-    }
-    
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
@@ -63,6 +49,7 @@ public class JwtUtil {
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
+ // Method to generate JWT token
     public String generateToken(String username) {
         Map<String, Object> claims = new HashMap<>();
         return createToken(claims, username);
@@ -81,6 +68,15 @@ public class JwtUtil {
     private Key getSignKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET);
         return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    public String generateToken(Customer customer) {
+        Map<String, Object> claims = new HashMap<>();
+        
+        // You can add custom claims here, such as roles or any other information you want to include
+        claims.put("roles", customer.getRoles()); // Assuming customer has a getRoles() method
+
+        return createToken(claims, customer.getEmail()); // Assuming customer has an email
     }
 
 }

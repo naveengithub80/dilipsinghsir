@@ -5,28 +5,29 @@ import java.util.Set;
 import com.digital.entity.Role;
 
 public class AuthResponse {
-    private String token;
+    private String jwt;
     private Set<Role> roles;
 
-    public AuthResponse(String token, Set<Role> roles) {
-        this.token = token;
-        this.roles = roles;
+    // Constructor, getters and setters
+    public AuthResponse(String jwt, Set<Role> set) {
+        this.jwt = jwt;
+        this.roles = set;
     }
 
-    // Getters and Setters
-    public String getToken() {
-        return token;
+    public String getJwt() {
+        return jwt;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setJwt(String jwt) {
+        this.jwt = jwt;
     }
 
     public Set<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Role> roles) {
+    public void getRoles(Set<Role> roles) {
         this.roles = roles;
     }
 }
+
